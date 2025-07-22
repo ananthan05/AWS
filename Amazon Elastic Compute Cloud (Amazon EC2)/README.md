@@ -402,12 +402,19 @@ Amazon EC2 provides different resources that you can use. These resources includ
 
 - In the AWS Management Console, in the search box next to **Services**, search for and choose **Service Quotas**.
 
+<img width="1918" height="856" alt="image" src="https://github.com/user-attachments/assets/7a4a5343-d770-41b7-a794-77dd0e048ac2" />
+
+
 ---
 
 ## Step 2: Navigate to EC2 Quotas
 
 - Choose **AWS services** from the navigation menu.
 - In the **AWS services - Find services** search bar, search for `ec2` and choose **Amazon Elastic Compute Cloud (Amazon EC2)**.
+
+<img width="1915" height="852" alt="image" src="https://github.com/user-attachments/assets/c53d4f16-f8e6-4962-9c41-b1c2ce54e0ef" />
+
+<img width="1913" height="820" alt="image" src="https://github.com/user-attachments/assets/855f675f-8bee-4ba9-91ca-b5386eb4cb30" />
 
 ---
 
@@ -416,8 +423,68 @@ Amazon EC2 provides different resources that you can use. These resources includ
 - In the **Find quotas** search bar, search for `running on-demand`, but **do not make a selection**.
 - Instead, **observe the filtered list** of service quotas that match the criteria.
 
+<img width="1892" height="760" alt="image" src="https://github.com/user-attachments/assets/c35cdb49-89a7-4978-bce2-a8dadc4df796" />
+
 > Notice that there are limits on the number and types of instances that can run in a region.  
 > For example, there is a limit on the number of **Running On-Demand Standard...** instances that you can launch in this region.  
 > When launching instances, the request must not cause your usage to exceed the instance limits currently defined in that region.
 
 > If you are the AWS account owner, you can **request an increase** for many of these limits.
+
+---
+
+# Task 6: Test Stop Protection
+
+You can stop your instance when you do not need to access but you would still like to retain it. In this task, you will learn how to use stop protection.
+
+---
+
+## Step 1: Return to the EC2 Console
+
+- In the AWS Management Console, in the search box next to **Services**, search for and choose **EC2** to return to the EC2 console.
+
+---
+
+## Step 2: Attempt to Stop the Instance
+
+- In the left navigation pane, choose **Instances**.
+- Select the **Web Server** instance and in the **Instance state** menu, select **Stop instance**.
+- Then choose **Stop**.
+
+> Note that there is a message that says:  
+> `Failed to stop the instance i-1234567xxx. The instance 'i-1234567xxx' may not be stopped. Modify its 'disableApiStop' instance attribute and try again.`
+
+
+<img width="1688" height="733" alt="image" src="https://github.com/user-attachments/assets/d4072515-1894-4fda-b406-92f5a8ba8be1" />
+
+
+This shows that the **stop protection** that you enabled earlier in this lab is now providing a safeguard to prevent the accidental stopping of an instance.
+
+---
+
+## Step 3: Disable Stop Protection
+
+- In the **Actions** menu, select **Instance settings > Change stop protection**.
+- Remove the check next to **Enable**.
+
+<img width="1902" height="723" alt="image" src="https://github.com/user-attachments/assets/328b0672-fcd1-4517-ab3b-1fedc8b39600" />
+
+- Choose **Save**.
+
+---
+
+## Step 4: Stop the Instance
+
+- Select the **Web Server** instance again.
+- In the **Instance state** menu, select **Stop instance**.
+- Choose **Stop**.
+
+
+<img width="1831" height="640" alt="image" src="https://github.com/user-attachments/assets/888b4506-408b-45ac-b93b-1c981f037488" />
+
+
+🎉 **Congratulations!** You have successfully tested stop protection and stopped your instance.
+
+---
+
+### Submit your work and the lab will grade you.
