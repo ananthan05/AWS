@@ -219,11 +219,11 @@ In the VPC Console, navigate to the left navigation pane and click Security grou
 
 Click Create security group, then configure the following:
 
-Security group name: Web Security Group
+Security group name: `Web Security Group`
 
-Description: Enable HTTP access
+Description: `Enable HTTP access`
 
-VPC: select lab-vpc
+VPC: select `lab-vpc`
 
 <img width="790" height="321" alt="image" src="https://github.com/user-attachments/assets/b2d9c783-2bfc-4fab-8fe1-bd6c3573a79d" />
 
@@ -231,11 +231,11 @@ Add Inbound Rule
 
 In the Inbound rules section, click Add rule and configure:
 
-Type: HTTP
+Type: `HTTP`
 
-Source: Anywhere-IPv4
+Source: `Anywhere-IPv4`
 
-Description: Permit web requests
+Description: `Permit web requests`
 
 <img width="1851" height="261" alt="image" src="https://github.com/user-attachments/assets/7a073764-c2a8-4aa8-9797-15ba62669d32" />
 
