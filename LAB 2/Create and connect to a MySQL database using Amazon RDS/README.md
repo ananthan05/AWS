@@ -221,6 +221,9 @@ In this task, you will configure a web application hosted on an EC2 instance to 
 
 ### 🔗 Step 3: Connect to RDS
 - Click the **RDS** link at the top of the page.
+
+<img width="1693" height="860" alt="image" src="https://github.com/user-attachments/assets/d1c6c01b-cc09-4dd5-b4cd-31997244cc85" />
+
 - Fill in the following fields:
 
   | Field     | Value                                  |
@@ -230,9 +233,13 @@ In this task, you will configure a web application hosted on an EC2 instance to 
   | Username  | `main`                                 |
   | Password  | `lab-password`                         |
 
+<img width="1677" height="667" alt="image" src="https://github.com/user-attachments/assets/a5e496d6-d906-4747-9208-136a21b936f3" />
+
 - Click **Submit**.
 
 > 🟢 A message should appear confirming the connection and data population.
+
+<img width="1692" height="721" alt="image" src="https://github.com/user-attachments/assets/654fa1ac-2229-4d28-8d53-3f631df29f0d" />
 
 ---
 
