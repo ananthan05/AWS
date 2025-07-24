@@ -484,6 +484,9 @@ In this task, you’ll enforce access control using a **Network ACL (NACL)**. Un
 1. Open the **Amazon VPC Console**.
 2. In the navigation pane, select **Network ACLs**.
 3. Choose the **network ACL associated with `LabVPC`**.
+
+<img width="1918" height="860" alt="image" src="https://github.com/user-attachments/assets/f911b9be-38dc-48b7-b98c-11e70921c9b0" />
+
 4. Go to the **Inbound rules** tab and click **Edit inbound rules**.
 5. Click **Add new rule** and configure:
    - **Rule number**: `99`
@@ -492,6 +495,9 @@ In this task, you’ll enforce access control using a **Network ACL (NACL)**. Un
    - **Port Range**: `80`
    - **Source**: `0.0.0.0/0`
    - **Allow/Deny**: `Deny`
+
+<img width="1918" height="582" alt="image" src="https://github.com/user-attachments/assets/52d67064-caf6-4f12-8439-0843966cd95d" />
+
 6. Click **Save changes**.
 
 🔒 This rule blocks **all HTTP access** to your VPC.
@@ -503,6 +509,8 @@ In this task, you’ll enforce access control using a **Network ACL (NACL)**. Un
 1. Open the **AWS Details** panel.
 2. Copy the **ProxyServer1PublicIP** value.
 3. Open a new browser tab and paste the IP.
+
+<img width="1570" height="832" alt="image" src="https://github.com/user-attachments/assets/5164501f-13e1-454f-8df7-bb2c944a87c5" />
 
 ❌ **Expected Result**: Page fails to load or times out.
 
@@ -525,6 +533,8 @@ Even though the security group allows HTTP (port 80) traffic, the **deny rule in
    - **Allow/Deny**: `Allow`
 3. Click **Save changes**.
 
+<img width="1918" height="748" alt="image" src="https://github.com/user-attachments/assets/9ea96905-07ae-41da-ab2e-a62a6b2b01b0" />
+
 ✅ The `Allow` rule will now match first due to the lower rule number.
 
 ---
@@ -533,6 +543,8 @@ Even though the security group allows HTTP (port 80) traffic, the **deny rule in
 
 1. Paste the **ProxyServer1PublicIP** in a new browser tab again.
 2. Press **Enter**.
+
+<img width="1622" height="617" alt="image" src="https://github.com/user-attachments/assets/4a785677-c674-45f2-a984-04bd7034671a" />
 
 ✅ **Expected Result**: AppServer website loads successfully.
 
@@ -553,3 +565,179 @@ Even though the security group allows HTTP (port 80) traffic, the **deny rule in
 - Keep VPC and EC2 consoles open for the next task.
 
 ---
+
+# Task 7: Connecting to the AppServer by Using a Bastion Host and SSH
+
+In this task, we connect to an EC2 instance in a **private subnet** using a **bastion host** (jump server) located in a **public subnet**, leveraging **SSH Agent Forwarding** for secure access.
+
+---
+
+## 🛠️ Step 1: Rename EC2 Instance
+
+1. Go to **EC2 Console > Instances**.
+2. Select `ProxyServer2`.
+3. Edit the **Name** tag and rename it to:  
+`Bastion`
+
+<img width="1918" height="586" alt="image" src="https://github.com/user-attachments/assets/563886dd-f8f0-4e55-81b4-a2af5a4e92f4" />
+
+---
+
+## 🛡️ Step 2: Create BastionSG Security Group
+
+1. Navigate to **Security Groups** > **Create Security Group**.
+2. Configure:
+- **Security group name**: `BastionSG`
+- **Description**: `BastionSG`
+- **VPC**: Select `LabVPC`
+3. Add Inbound Rule:
+- **Type**: SSH
+- **Source**: Anywhere-IPv4 (`0.0.0.0/0`)
+4. Click **Create security group**.
+
+<img width="1867" height="797" alt="image" src="https://github.com/user-attachments/assets/06ba1747-a3b2-4434-9050-0b8928912ee0" />
+
+---
+
+## 🔐 Step 3: Attach BastionSG to Bastion Instance
+
+1. Go to **EC2 > Instances > Bastion**.
+2. Choose **Actions > Security > Change security groups**.
+3. Remove `ProxySG`, add `BastionSG`, and click **Save**.
+
+<img width="1908" height="715" alt="image" src="https://github.com/user-attachments/assets/d67533f9-4ddd-40e9-ac4e-32b488ef2514" />
+
+
+---
+
+## 🔐 Step 4: Allow SSH to AppServer from Bastion
+
+1. Get the `BastionPrivateIP` from **AWS Details**.
+2. Go to **Security Groups**, select `AppServerSG`.
+3. **Edit Inbound Rules**:
+- **Type**: SSH
+- **Source**: `BastionPrivateIP/32`
+4. Click **Save rules**.
+
+<img width="1887" height="742" alt="image" src="https://github.com/user-attachments/assets/ae82112e-99ae-4cd2-9dd3-8caa892ef7c3" />
+
+
+---
+
+## 🖥️ Step 5: Connect to Bastion Host
+
+In the terminal provided:
+
+```bash
+exec ssh-agent bash
+ssh-add ~/.ssh/labsuser.pem
+```
+
+<img width="946" height="107" alt="image" src="https://github.com/user-attachments/assets/c6037194-59c1-4ac6-8957-3005eb87277c" />
+
+Then connect to the Bastion host (replace IP):
+```bash
+ssh -i ~/.ssh/labsuser.pem -A ec2-user@<BastionPublicIP>
+```
+---
+<img width="917" height="425" alt="image" src="https://github.com/user-attachments/assets/57955e3c-e597-411d-a882-d4260d911762" />
+
+##  Step 6: SSH to AppServer (Private Subnet)
+From the bastion shell:
+
+```bash
+ssh ec2-user@<AppServerPrivateIP>
+```
+When prompted, type yes.
+
+<img width="722" height="313" alt="image" src="https://github.com/user-attachments/assets/a4843eeb-65bd-4f84-896d-566c8dcad8c4" />
+
+Once connected:
+
+```bash
+touch newfile.txt
+```
+<img width="677" height="97" alt="image" src="https://github.com/user-attachments/assets/f7958929-f3d9-4397-b984-ca12e396c405" />
+
+This proves successful access to the private AppServer.
+
+🧪 Verification & Exit
+The prompt should say ec2-user@appserver.
+
+Run:
+
+```bash
+exit  # Exit AppServer
+exit  # Exit Bastion
+```
+
+
+<img width="512" height="136" alt="image" src="https://github.com/user-attachments/assets/0d53b21d-6204-4230-adf4-4f0d76adbafb" />
+
+Now you're back on the external Ubuntu terminal.
+
+📘 Summary
+✅ We used SSH Agent Forwarding to avoid copying private keys into the bastion.
+✅ The AppServerSG only allows SSH from BastionPrivateIP.
+✅ This is a secure and auditable method to access private resources in AWS.
+
+
+
+# 🔒 Task 8: Connecting Directly to a Host in a Private Subnet Using Session Manager
+
+In this task, you will connect to the **AppServer** instance located in a **private subnet**—**without using a bastion host or port 22 (SSH)**. You’ll use **AWS Systems Manager Session Manager**, which provides a secure and auditable shell connection without any network exposure.
+
+---
+
+## ⚙️ Step 1: Use Session Manager to Access AppServer
+
+1. Open the **Amazon EC2 Console**.
+2. In the left navigation pane, choose **Instances**.
+3. Select the instance named **AppServer**.
+4. Click **Connect** in the upper-right corner.
+5. In the pop-up:
+   - Select the **Session Manager** tab.
+   - Click **Connect**.
+
+🖥️ A new browser tab opens and you're now connected to the AppServer terminal:
+
+```bash
+sh-4.2$
+```
+<img width="1918" height="787" alt="image" src="https://github.com/user-attachments/assets/a0d03e77-ef3c-48ec-b7f9-00c96da78466" />
+
+
+✅ You’ve connected securely using Session Manager without needing SSH access.
+
+💡 Note: Port 22 is still blocked via the NACL — this proves Session Manager requires no SSH!
+
+## Step 2: Modify the Webpage on AppServer
+In the Session Manager terminal connected to AppServer, run the following command:
+
+```bash
+sudo sed -i 's/instance!/instance! Session manager was used to edit this file./g' /var/www/html/index.html
+```
+
+<img width="1918" height="366" alt="image" src="https://github.com/user-attachments/assets/f7b8b322-c1fa-40be-83ab-456230ae0fe6" />
+
+✅ This command modifies the homepage of the website hosted on the AppServer.
+
+## Step 3: Test the Website Using the ProxyServer Public IP
+
+Open the AWS Details panel.
+
+Copy the value for ProxyServer1PublicIP.
+
+Open a new browser tab and paste the IP address.
+
+✅ Expected Result: The webpage loads and now says:
+
+<img width="1833" height="766" alt="image" src="https://github.com/user-attachments/assets/7c6a50c7-d019-40ca-87e6-89ea9227580d" />
+
+"Session manager was used to edit this file."
+
+💡 If the old version appears, perform a hard refresh:
+Ctrl + Shift + R (Windows) or Cmd + Shift + R (Mac).
+
+
+Submit Your Work
