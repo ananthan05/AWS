@@ -105,19 +105,19 @@ You successfully created a **customer-managed AWS KMS key**. This key will be us
 
 ---
 
-#  Task 2: Storing an Encrypted Object in an S3 Bucket
+## Task 2: Storing an Encrypted Object in an S3 Bucket
 
 In this task, you’ll upload an image (`clock.png`) to an S3 bucket with **SSE-KMS encryption** using the **KMS key** you created in Task 1 (`MyKMSKey`).
 
 ---
 
-## 📥 Step 1: Download the File to Upload
+### 📥 Step 1: Download the File to Upload
 
 - Download the image file [clock.png](https://aws-tc-largeobjects.s3.us-west-2.amazonaws.com/CUR-TF-100-ACSECF-1-DEV/lab-5.1-kms/s3/clock.png) to your local machine.
 
 ---
 
-##  Step 2: Locate the S3 Bucket and Analyze Encryption Settings
+###  Step 2: Locate the S3 Bucket and Analyze Encryption Settings
 
 1. Open the **Amazon S3 Console**.
 2. In the navigation pane, click **Buckets**.
@@ -136,7 +136,7 @@ In this task, you’ll upload an image (`clock.png`) to an S3 bucket with **SSE-
 
 ---
 
-##  Step 3: Upload the Image with KMS Encryption
+###  Step 3: Upload the Image with KMS Encryption
 
 1. Navigate to the **Objects** tab inside the bucket.
 2. Click **Upload**.
@@ -158,7 +158,7 @@ In this task, you’ll upload an image (`clock.png`) to an S3 bucket with **SSE-
 
 ---
 
-##  Step 4: Understand the Behind-the-Scenes Encryption Process
+### Step 4: Understand the Behind-the-Scenes Encryption Process
 
 | Step | Description |
 |------|-------------|
@@ -170,7 +170,7 @@ In this task, you’ll upload an image (`clock.png`) to an S3 bucket with **SSE-
 
 ---
 
-## 🔍 Step 5: Verify Object-Level Encryption
+### 🔍 Step 5: Verify Object-Level Encryption
 
 1. In the **S3 Console**, click on the `clock.png` object.
 2. In the **Properties** tab, scroll to **Server-side encryption**.
@@ -193,13 +193,13 @@ In this task, you’ll upload an image (`clock.png`) to an S3 bucket with **SSE-
 
 ---
 
-#  Task 3: Attempting Public Access to the Encrypted S3 Object
+##  Task 3: Attempting Public Access to the Encrypted S3 Object
 
 In this task, you will attempt to access an **SSE-KMS encrypted object** (`clock.png`) in Amazon S3 using its **object URL**, and observe how encryption and access control mechanisms protect it from unauthorized public access.
 
 ---
 
-##  Step 1: Attempt to Open the Object via URL
+###  Step 1: Attempt to Open the Object via URL
 
 1. In the S3 Console, go to the `clock.png` object.
 2. Copy the **Object URL** from the **Object overview** section.
@@ -214,7 +214,7 @@ In this task, you will attempt to access an **SSE-KMS encrypted object** (`clock
 
 ---
 
-##  Step 2: Modify Bucket-Level Public Access Settings
+###  Step 2: Modify Bucket-Level Public Access Settings
 
 1. In the S3 Console, go to the **bucket** that contains `imagebucket`.
 2. Click on the **Permissions** tab.
@@ -228,7 +228,7 @@ In this task, you will attempt to access an **SSE-KMS encrypted object** (`clock
 
 ---
 
-##  Step 3: Modify Object Ownership and Access Control List (ACL)
+###  Step 3: Modify Object Ownership and Access Control List (ACL)
 
 1. In the same bucket, go to the **Permissions** tab.
 2. Under **Object Ownership**, click **Edit**:
@@ -251,7 +251,7 @@ In this task, you will attempt to access an **SSE-KMS encrypted object** (`clock
 
 ---
 
-##  Step 4: Revisit the Object URL
+###  Step 4: Revisit the Object URL
 
 1. Go back to the browser tab where you previously saw the `Access Denied` error.
 2. Refresh the page.
@@ -291,13 +291,13 @@ Even if **public access is accidentally enabled**, encryption using **AWS KMS** 
 
 ---
 
-#  Task 4: Attempting Signed Access to the Encrypted Object
+##  Task 4: Attempting Signed Access to the Encrypted Object
 
 In this task, you attempt to decrypt an **SSE-KMS encrypted object** (`clock.png`) from **within the Amazon S3 console** using **authenticated access**.
 
 ---
 
-##  Step 1: Open the Encrypted Object as an Authenticated User
+###  Step 1: Open the Encrypted Object as an Authenticated User
 
 1. In the Amazon S3 Console, go to the **Objects** tab of the bucket (e.g., `imagebucket-...`).
 2. Select `clock.png`.
@@ -310,7 +310,7 @@ In this task, you attempt to decrypt an **SSE-KMS encrypted object** (`clock.png
 
 ---
 
-##  Step 2: Analyze the Signed URL
+###  Step 2: Analyze the Signed URL
 
 Observe the format of the URL in the new browser tab:
 
@@ -322,7 +322,7 @@ Observe the format of the URL in the new browser tab:
 
 ---
 
-##  Step 3: What Happens Behind the Scenes
+###  Step 3: What Happens Behind the Scenes
 
 When you clicked **Open** in the S3 Console, the following process occurred:
 
@@ -360,7 +360,7 @@ When you clicked **Open** in the S3 Console, the following process occurred:
 
 **Next Task**: You can now proceed to test encryption in EC2/EBS or automate KMS use with SDKs/CLI.
 
-# Task 5: Monitoring AWS KMS Activity Using CloudTrail
+## Task 5: Monitoring AWS KMS Activity Using CloudTrail
 
 In this task, you monitor AWS KMS activity through the **CloudTrail Event History**, an essential auditing and forensic tool for tracking how KMS keys are used in your AWS account.
 
@@ -375,7 +375,7 @@ In this task, you monitor AWS KMS activity through the **CloudTrail Event Histor
 
 ---
 
-##  Step 1: Access CloudTrail Event History
+###  Step 1: Access CloudTrail Event History
 
 1. Go to the AWS Console.
 2. Search for **CloudTrail** in the Services search bar.
@@ -388,7 +388,7 @@ In this task, you monitor AWS KMS activity through the **CloudTrail Event Histor
 
 ---
 
-##  Step 2: Filter Events for AWS KMS
+###  Step 2: Filter Events for AWS KMS
 
 1. Use the **dropdown filter** that defaults to `Read-only`.
 2. Select **Event source**.
@@ -405,7 +405,7 @@ kms.amazonaws.com
 
 ---
 
-## Step 3: Analyze the `GenerateDataKey` Event
+### Step 3: Analyze the `GenerateDataKey` Event
 
 1. Find and click the event name: **GenerateDataKey**.
 2. View the **Event record** panel.
@@ -413,7 +413,7 @@ kms.amazonaws.com
 <img width="880" height="1036" alt="image" src="https://github.com/user-attachments/assets/b5288659-5338-4687-8602-bf42857038b1" />
 
 
-###  Key Fields in the Event Record:
+####  Key Fields in the Event Record:
 
 | Field | Description |
 |-------|-------------|
@@ -427,7 +427,7 @@ kms.amazonaws.com
 
 ---
 
-##  Step 4: Analyze the `Decrypt` Event
+###  Step 4: Analyze the `Decrypt` Event
 
 1. Go back to the **Event history** tab.
 2. Still filtered by `kms.amazonaws.com`, find and click the **Decrypt** event.
@@ -435,7 +435,7 @@ kms.amazonaws.com
 <img width="1875" height="793" alt="image" src="https://github.com/user-attachments/assets/5fe77a9c-2fb1-45ef-8975-3613a55ad68f" />
 
 
-###  Key Fields in the Decrypt Event:
+####  Key Fields in the Decrypt Event:
 
 | Field | Description |
 |-------|-------------|
@@ -473,7 +473,7 @@ kms.amazonaws.com
 
  **Next Step**: Use the KMS key with EC2 or integrate KMS with AWS SDK/CLI for automation and encryption at scale.
 
-# Task 6: Encrypting the Root Volume of an Existing EC2 Instance
+## Task 6: Encrypting the Root Volume of an Existing EC2 Instance
 
 In this task, you encrypted the root volume of an EC2 instance by creating a snapshot, generating a new encrypted volume, and attaching it back to the instance.
 
@@ -607,5 +607,92 @@ Notice that the encryption status of the snapshot is Not encrypted
 **Next Task**: Start the instance and verify functionality with the new encrypted root volume.
 
 
+##  Task 7: Disabling the Encryption Key and Observing the Effects
+
+In this task, you will disable the **AWS KMS key** used to encrypt your S3 object and EBS volume, observe the resulting access issues, and analyze CloudTrail logs to understand what went wrong.
+
+---
+
+###  Step 1: Disable the AWS KMS Key
+
+1. Go to the **KMS Console**
+2. In the left pane, choose **Customer managed keys**
+3. Select: `MyKMSKey`
+4. Choose: `Key actions > Disable`
+5. Confirm by:
+<img width="1917" height="772" alt="image" src="https://github.com/user-attachments/assets/cf789e47-e599-4ff4-b93e-e4dba121a21f" />
+
+   - ✅ Checking **"Confirm that you want to disable this key"**
+   - Click **Disable key**
+
+---
+
+###  Step 2: Attempt to Start the EC2 Instance
+
+1. Navigate to the **EC2 Console**
+2. Select `LabInstance`
+3. Choose: `Instance state > Start instance`
+4. Use the 🔄 refresh icon to monitor the state
+5.  **Result**: Instance moves from **Pending** ➝ **Stopped**
+
+<img width="1918" height="593" alt="image" src="https://github.com/user-attachments/assets/0ad48ba3-97ce-43dd-bf27-a4decce20542" />
 
 
+---
+
+###  Step 3: Try to Access the S3 Object
+
+1. Go to the **S3 Console**
+2. Navigate to the bucket containing `imagebucket`
+3. Select `clock.png` and click **Open**
+
+<img width="1427" height="417" alt="image" src="https://github.com/user-attachments/assets/9ca90e1c-63ec-4588-8f31-f464d680bc95" />
+
+4.  **Result**: Image fails to load, showing a `KMS.DisabledException`
+
+---
+
+###  Step 4: Analyze CloudTrail Event History
+
+1. Navigate to the **CloudTrail Console**
+2. Go to **Event History**
+3. Review the following events:
+
+<img width="929" height="397" alt="image" src="https://github.com/user-attachments/assets/55da0f53-52a8-4e32-8639-59f9b474e883" />
+
+
+####  DisableKey
+- Shows that `MyKMSKey` was successfully disabled
+
+####  StartInstances
+- Status: **Success**
+- Outcome: Instance failed to reach **Running** state due to decryption failure
+
+####  CreateGrant
+- Displays an error:
+ ```json
+  "errorMessage": "Key is disabled."
+ ```
+
+Explanation: EC2 requested a plaintext data key to decrypt the EBS root volume, but KMS refused because the key was disabled.
+
+### Step 5: Re-enable the AWS KMS Key
+
+Return to AWS KMS Console
+
+Select: MyKMSKey
+
+Choose: Key actions > Enable
+
+<img width="1912" height="480" alt="image" src="https://github.com/user-attachments/assets/bc881b37-7ab5-4f8a-9662-9abf5608a770" />
+
+###  Step 6: Restart the Instance
+Go back to the EC2 Console
+
+Select LabInstance
+
+Choose: Instance state > Start instance
+
+✅ Wait until the Instance state becomes Running
+
+Submitting your work
