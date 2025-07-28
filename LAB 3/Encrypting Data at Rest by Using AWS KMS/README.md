@@ -102,6 +102,9 @@ voclabs
 ## 🎉 You Did It!
 You successfully created a **customer-managed AWS KMS key**. This key will be used in the next tasks to manage data encryption for services like **S3** and **EC2**.
 
+
+
+
 ---
 
 
