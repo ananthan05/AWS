@@ -358,8 +358,119 @@ When you clicked **Open** in the S3 Console, the following process occurred:
 
 ---
 
-📌 **Next Task**: You can now proceed to test encryption in EC2/EBS or automate KMS use with SDKs/CLI.
+**Next Task**: You can now proceed to test encryption in EC2/EBS or automate KMS use with SDKs/CLI.
 
+# Task 5: Monitoring AWS KMS Activity Using CloudTrail
+
+In this task, you monitor AWS KMS activity through the **CloudTrail Event History**, an essential auditing and forensic tool for tracking how KMS keys are used in your AWS account.
+
+---
+
+##  Objective
+
+- View events logged by **CloudTrail**.
+- Filter and analyze **KMS-specific operations**, such as:
+  - `GenerateDataKey`
+  - `Decrypt`
+
+---
+
+##  Step 1: Access CloudTrail Event History
+
+1. Go to the AWS Console.
+2. Search for **CloudTrail** in the Services search bar.
+3. In the **navigation pane**, click **Event history**.
+
+<img width="1917" height="832" alt="image" src="https://github.com/user-attachments/assets/da9c40bc-f453-4117-9c2c-c2daf0b5eec1" />
+
+>  CloudTrail logs API activity for the **last 90 days** by default.  
+> Each record shows an **event source**, **event name**, and **requestor identity**.
+
+---
+
+##  Step 2: Filter Events for AWS KMS
+
+1. Use the **dropdown filter** that defaults to `Read-only`.
+2. Select **Event source**.
+3. In the search field, enter:
+```
+kms.amazonaws.com
+```
+4. Select it to filter **only KMS-related events**.
+
+<img width="1917" height="818" alt="image" src="https://github.com/user-attachments/assets/d48466cd-9f9b-4b0e-8ea3-296ffdbc1494" />
+
+
+
+
+---
+
+## Step 3: Analyze the `GenerateDataKey` Event
+
+1. Find and click the event name: **GenerateDataKey**.
+2. View the **Event record** panel.
+
+<img width="880" height="1036" alt="image" src="https://github.com/user-attachments/assets/b5288659-5338-4687-8602-bf42857038b1" />
+
+
+###  Key Fields in the Event Record:
+
+| Field | Description |
+|-------|-------------|
+| `eventName` | `GenerateDataKey` |
+| `keyId` | ARN of the **MyKMSKey** created in Task 1 |
+| `principalId` | IAM user/role (`voclabs`) who triggered the request |
+| `resource` | S3 Object: `clock.png` |
+
+>  This event was triggered when you uploaded `clock.png` to S3.  
+> S3 requested KMS to generate a **data key** used to encrypt the object.
+
+---
+
+##  Step 4: Analyze the `Decrypt` Event
+
+1. Go back to the **Event history** tab.
+2. Still filtered by `kms.amazonaws.com`, find and click the **Decrypt** event.
+
+<img width="1875" height="793" alt="image" src="https://github.com/user-attachments/assets/5fe77a9c-2fb1-45ef-8975-3613a55ad68f" />
+
+
+###  Key Fields in the Decrypt Event:
+
+| Field | Description |
+|-------|-------------|
+| `eventName` | `Decrypt` |
+| `keyId` | Same **MyKMSKey** from Task 1 |
+| `principalId` | Same IAM role (`voclabs`) |
+| `resource` | S3 Object: `clock.png` |
+
+>  This event occurred when you opened `clock.png` in the S3 Console.  
+> S3 asked KMS to **decrypt** the encrypted data key so it could render the image.
+
+---
+
+##  Summary
+
+| Aspect | Details |
+|--------|---------|
+| Monitoring Tool | AWS CloudTrail |
+| Filtered Service | `kms.amazonaws.com` |
+| Events Analyzed | `GenerateDataKey`, `Decrypt` |
+| Key Used | `MyKMSKey` (Customer managed KMS key) |
+| IAM Role | `voclabs` |
+| Insights | Proven use of key, traceable operations, identity-level logging |
+
+---
+
+##  Bonus: Long-Term Auditing
+
+>  To retain KMS logs **beyond 90 days**, you can:
+- Create a **CloudTrail trail**.
+- Store logs in **Amazon S3** for **compliance, SIEM, and analytics**.
+
+---
+
+ **Next Step**: Use the KMS key with EC2 or integrate KMS with AWS SDK/CLI for automation and encryption at scale.
 
 
 
