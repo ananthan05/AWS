@@ -291,6 +291,75 @@ Even if **public access is accidentally enabled**, encryption using **AWS KMS** 
 
 ---
 
+#  Task 4: Attempting Signed Access to the Encrypted Object
+
+In this task, you attempt to decrypt an **SSE-KMS encrypted object** (`clock.png`) from **within the Amazon S3 console** using **authenticated access**.
+
+---
+
+##  Step 1: Open the Encrypted Object as an Authenticated User
+
+1. In the Amazon S3 Console, go to the **Objects** tab of the bucket (e.g., `imagebucket-...`).
+2. Select `clock.png`.
+3. Choose **Open**.
+
+<img width="1875" height="487" alt="image" src="https://github.com/user-attachments/assets/8ddeac5c-3dd5-4ef2-a1b8-8edb3b1b78c6" />
+
+ **Result**: The image opens in a **new tab**.  
+ It displays a **clock in an airport or train station**.
+
+---
+
+##  Step 2: Analyze the Signed URL
+
+Observe the format of the URL in the new browser tab:
+
+```
+[https://<bucket-name>.s3.<region>.amazonaws.com/clock.png?response-content-disposition=inline&X-Amz-<signature-parameters>](https://c171167a4440717l11034033t1w21776309913-imagebucket-70wkcuzhtdro.s3.us-east-1.amazonaws.com/clock.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIATFM5RGH6YUAICGLL%2F20250728%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20250728T053122Z&X-Amz-Expires=300&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEF4aCXVzLWVhc3QtMSJHMEUCIQDLwmqJsu72ypnuFZktPOxRXCwZNM9G5B0pMjC5yJveBQIgdSqn2MQ7g0iWmfn82LtgKQSTqrMHUfYK7Qah%2FYw4FMYq9gIIh%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARABGgwyMTc3NjMwOTkxMzMiDEGBpnVXOsIwNqb2SirKAj7zcqa7UeEZXHWFPm9AEYS16Y%2BHbjZTcIEOzSkh7aXvjh5JkJkFZpPFtsrEY56LK2QlythR916v3P2tM4Mu7lXElrGBf3R43uoHGN9IGmleklWOIF2oNUsH7AnaU56vdqiJbX%2FQiIWil5c03GcZCwzSFzE6p4KHAMQ2DQ6KJsLaCcM7rHJuS214uDDFKV%2B2AEtWX9J1UmJwdZg80XEVEDFavsOTHRQ36vTKePHM2a70ZWQkDO4G8tH%2F5K66%2FIRPoIiTCNTwLGexkj6OwjkFBrQGzBnpMrSruUGHSQXOgQubPtWD7iyQ4ZLn%2BeEaVuWvoaCAI%2BjbuvHslhZR0JKhg%2B2WL0b0PPZ9fA3wh0%2FEFRae1afgoG4NFr2Mq4LWUBYJmzBcgHrvzRxxsOfzJzYAeHV9xYOjzv%2B43P7LIXH6rA1KrvIVHmvj2wz17DCl%2F5vEBjqHAloj0abUAjU%2Fb%2FbJTx2fMjA3gbg0KTx0zYjIz%2BWZXWRC5Qz%2FwJ7v%2BdGlDBjaUQ6Z6lAf5k9PYvRe2j30zChyI0X9w3nULVnMbaUggRd%2FfrWxplV%2BhIcdFS5WyAENMJ5tnTP%2Bl9%2Fhuh4PlyxSR8AONQXwjfeb%2BqbWNIPIehZ5BL6z%2BV%2FL%2B9ZTu3ErQjc3YxkQZleyGbXugH2O5fNIWjyCm2YyDRvtc5HH8cmNmOA5WSKIU%2F4Y%2BPJyBLa4zrTfA%2BBaAJprcT3DKa8Kw8Vea0AD3LicBa7B1iGRHvjFkdsSUS96PP237vwqf43QkLNl9RpCXDZkrA5lZGbKAZQObSrZdNc%2B2%2BP7xzG3&X-Amz-Signature=b07195cdf28f58547dad944167bf3f059ff5cc64227e6097953a4a2e3356cba2&X-Amz-SignedHeaders=host&response-content-disposition=inline)
+```
+
+> The `X-Amz-*` parameters are components of an **AWS Signature Version 4 signed request**, allowing **temporary, authenticated** access to the object.
+
+---
+
+##  Step 3: What Happens Behind the Scenes
+
+When you clicked **Open** in the S3 Console, the following process occurred:
+
+| Step | Explanation |
+|------|-------------|
+| 1️⃣ | You requested to open the `clock.png` object. |
+| 2️⃣ | Amazon S3 saw that the object was encrypted with **SSE-KMS**. |
+| 3️⃣ | Because you were authenticated to AWS (as `voclabs` role), the console added **Signature Version 4** credentials to the request. |
+| 4️⃣ | Amazon S3 sent the **encrypted data key** (used to encrypt the object) to **AWS KMS**. |
+| 5️⃣ | **AWS KMS** decrypted the data key using your **MyKMSKey** (which never leaves KMS). |
+| 6️⃣ | KMS returned the **plaintext data key** to S3. |
+| 7️⃣ | Amazon S3 decrypted the object using the data key and **rendered it in your browser**. |
+| 8️⃣ | S3 then **deleted the plaintext key** immediately after use. |
+
+---
+
+##  Security Implications
+
+- **Public access** to KMS-encrypted objects without valid **SigV4** authentication is **not allowed**.
+- This mechanism ensures only **authorized IAM roles/users** with **explicit KMS permissions** can decrypt sensitive data—even if it's publicly accessible at the bucket level.
+
+---
+
+##  Summary
+
+| Task Component | Outcome |
+|----------------|---------|
+| Access method | Authenticated via S3 Console |
+| Object accessibility | ✅ Successfully decrypted |
+| Encryption type | Server-Side Encryption with AWS KMS (SSE-KMS) |
+| Signature Used | AWS Signature Version 4 |
+| Security Benefit | Ensures encryption key access control, even if object ACL is public |
+
+---
+
+📌 **Next Task**: You can now proceed to test encryption in EC2/EBS or automate KMS use with SDKs/CLI.
+
 
 
 
