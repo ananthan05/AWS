@@ -237,10 +237,15 @@ In this task, you will attempt to access an **SSE-KMS encrypted object** (`clock
    - Keep **Bucket owner preferred** selected.
    - Click **Save changes**.
 
+<img width="1917" height="863" alt="image" src="https://github.com/user-attachments/assets/39521aaa-6770-4abf-ad58-1b394cdc79f4" />
+
+
 3. Go to the **Objects** tab.
 4. Select `clock.png`.
 5. Choose **Actions > Make public using ACL**.
 6. Confirm by choosing **Make public**.
+
+<img width="1788" height="722" alt="image" src="https://github.com/user-attachments/assets/664fd7a0-df6d-42d0-9885-62cd1aab90b8" />
 
 ✅ A confirmation banner appears indicating that the object was successfully made public.
 
@@ -250,6 +255,8 @@ In this task, you will attempt to access an **SSE-KMS encrypted object** (`clock
 
 1. Go back to the browser tab where you previously saw the `Access Denied` error.
 2. Refresh the page.
+
+<img width="979" height="180" alt="image" src="https://github.com/user-attachments/assets/d26b6041-afb3-476c-a310-2d1a266ae3ee" />
 
  **New Result**: You now see an `InvalidArgument` error.
 
