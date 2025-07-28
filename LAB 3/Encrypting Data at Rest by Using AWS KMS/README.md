@@ -470,7 +470,142 @@ kms.amazonaws.com
 
 ---
 
+
  **Next Step**: Use the KMS key with EC2 or integrate KMS with AWS SDK/CLI for automation and encryption at scale.
+
+# Task 6: Encrypting the Root Volume of an Existing EC2 Instance
+
+In this task, you encrypted the root volume of an EC2 instance by creating a snapshot, generating a new encrypted volume, and attaching it back to the instance.
+
+---
+
+
+### Step 1: View Existing Volume Encryption Status
+
+1. Go to **EC2** console
+2. Navigate to **Instances > LabInstance**
+3. Select the instance and go to the **Storage** tab
+4. Observe:
+   - Block device `/dev/xvda`
+<img width="1918" height="837" alt="image" src="https://github.com/user-attachments/assets/bdece41c-fdc1-4ff1-8471-a55fd65231e9" />
+
+   - Encryption status: **Not Encrypted**
+
+---
+
+###  Step 2: Stop the Instance
+
+1. Return to **Instances**
+2. Select **LabInstance**
+3. Choose: `Instance State > Stop instance`
+<img width="1918" height="860" alt="image" src="https://github.com/user-attachments/assets/cfd3c4cf-f212-49b8-b056-dd3efe579052" />
+
+4. Confirm by clicking **Stop**
+
+---
+
+###  Step 3: Create a Snapshot of the Unencrypted Volume
+
+1. Under **Storage tab**, click on the **Volume ID**
+2. Click the **Volume ID** again to go to the volume details
+3. Note down the **Availability Zone** (e.g., `us-east-1a`)
+<img width="1900" height="796" alt="image" src="https://github.com/user-attachments/assets/674f0bba-11fc-488f-94d1-c06782990ade" />
+
+4. Choose: `Actions > Create Snapshot`
+5. Add tag:
+   - **Key**: `Name`
+   - **Value**: `Unencrypted Root Volume`
+6. Click **Create Snapshot**
+<img width="1918" height="807" alt="image" src="https://github.com/user-attachments/assets/b317bdf7-91e0-4c9f-a4cd-256f497106ac" />
+
+
+---
+
+###  Step 4: Create an Encrypted Volume from Snapshot
+
+1. Navigate to **Elastic Block Store > Snapshots**
+2. Select the snapshot tagged `Unencrypted Root Volume`
+3. Wait until status is **Completed**
+
+<img width="1918" height="607" alt="image" src="https://github.com/user-attachments/assets/af76e08a-bf8a-48d0-90bc-cb606ccdf295" />
+
+Notice that the encryption status of the snapshot is Not encrypted
+
+4. Choose: `Actions > Create volume from snapshot`
+5. Configure:
+   - **Availability Zone**: Same as the original (e.g., `us-east-1a`)
+   - **Encrypt this volume**: ✅ Checked
+   - **KMS key**: `MyKMSKey`
+
+<img width="1871" height="782" alt="image" src="https://github.com/user-attachments/assets/7551681d-b1d4-4f2c-a0cd-4bdaa8e80839" />
+
+6. Click **Create Volume**
+
+---
+
+###  Step 5: Rename the Volumes
+
+1. Go to **Elastic Block Store > Volumes**
+2. For the volume with state `In-use`, rename to: `Old unencrypted root volume`
+
+3. For the volume with state `Available`, rename to: `New encrypted root volume`
+
+<img width="1918" height="793" alt="image" src="https://github.com/user-attachments/assets/a7e8e01c-b45a-4636-af2e-5cce2f8e08cb" />
+
+---
+
+###  Step 6: Swap the Root Volumes
+
+####  Detach Old Volume
+
+1. Select `Old unencrypted root volume`
+2. Choose: `Actions > Detach volume`
+3. Confirm with **Detach**
+
+<img width="1916" height="793" alt="image" src="https://github.com/user-attachments/assets/eeae8888-5ce5-483b-aab2-02789abde35b" />
+
+####  Attach New Encrypted Volume
+
+1. Select `New encrypted root volume`
+2. Choose: `Actions > Attach volume`
+3. Configure:
+   - **Instance**: `LabInstance (stopped)`
+   - **Device name**: `/dev/xvda`
+4. Click **Attach volume**
+
+<img width="1918" height="815" alt="image" src="https://github.com/user-attachments/assets/02048bc9-b033-49b9-beea-1d3e48d4978a" />
+
+
+---
+
+###  Step 7: Verify Encryption
+
+1. Go back to **Instances > LabInstance**
+2. Open the **Storage** tab
+3. Confirm:
+
+<img width="1918" height="856" alt="image" src="https://github.com/user-attachments/assets/46257c62-759a-4b2f-875b-cdd68bca4e57" />
+
+   - The attached root volume is **encrypted**
+   - The **KMS key ID** (`MyKMSKey`) is listed
+
+>  If not visible, refresh the console
+
+---
+
+##  Summary
+
+| Step | Description |
+|------|-------------|
+| 🔄 Swap | Unencrypted volume replaced with encrypted one |
+| 🔐 Encryption | Done using **MyKMSKey** |
+| 📊 Verification | KMS key ID visible in EC2 storage tab |
+| 🔧 Instance State | Still **stopped**, will be started in next task |
+
+---
+
+**Next Task**: Start the instance and verify functionality with the new encrypted root volume.
+
 
 
 
