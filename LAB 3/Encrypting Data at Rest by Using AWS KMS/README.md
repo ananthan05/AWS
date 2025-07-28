@@ -693,6 +693,9 @@ Select LabInstance
 
 Choose: Instance state > Start instance
 
+<img width="1913" height="637" alt="image" src="https://github.com/user-attachments/assets/95877888-bd1a-415b-a224-c9ef6d555bb4" />
+
+
 ✅ Wait until the Instance state becomes Running
 
 Submitting your work
